@@ -4,11 +4,15 @@
  * and open the template in the editor.
  */
 package breakingbad;
+import java.awt.image.BufferedImage;
 
-/**
- *
- * @author juanpabloramos
- */
 public class Assets {
-    
+    public static BufferedImage background;
+
+    /**
+     * Assets initializer, to be called in Game
+     */
+    public static void init() {
+        background = ImageLoader.loadImage("/images/background.png");
+    }
 }
