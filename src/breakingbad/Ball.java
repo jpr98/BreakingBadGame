@@ -27,17 +27,17 @@ class Ball extends Item {
         this.width = width;
     }
 
-	public void setXDir(int xDir) {
-		this.xDir = xDir;
-	}
-
-	public void setYDir(int yDir) {
-		this.yDir = yDir;
+    public void setXDir(int xDir) {
+	this.xDir = xDir;
     }
 
-	public void setOnScreen(boolean onScreen) {
-		this.onScreen = onScreen;
-	}
+    public void setYDir(int yDir) {
+	this.yDir = yDir;
+    }
+
+    public void setOnScreen(boolean onScreen) {
+        this.onScreen = onScreen;
+    }
 
     public int getHeight() {
         return height;
@@ -47,16 +47,16 @@ class Ball extends Item {
         return width;
     }
 
-	public int getXDir() {
-		return xDir;
-	}
+    public int getXDir() {
+	return xDir;
+    }
 
-	public int getYDir() {
-		return yDir;
-	}
+    public int getYDir() {
+	return yDir;
+    }
 
-	public boolean isOnScreen() {
-		return onScreen;
+    public boolean isOnScreen() {
+	return onScreen;
     }
     
     @Override
