@@ -26,8 +26,10 @@ public class Game implements Runnable {
     private int numBricks;
     private int posX;
     private int posY;
-    private int lives = 4;
     private int frames;
+    private int score;
+    private int lives;
+    private boolean paused;
 
     /**
      * Constructor
@@ -46,20 +48,23 @@ public class Game implements Runnable {
         posY = 10;
         posX = 20;
         frames = 0;
+        score = 0;
+        lives = (int)(Math.random() * 3 + 3);
+        paused = false;
     }
 
-    /**
-     * Returns game width
-     * @return
-     */
+    public void setLives(int lives){
+        this.lives = lives;
+    }
+
+    public int getLives(){
+        return lives;
+    }
+
     public int getWidth() {
         return width;
     }
 
-    /**
-     * Returns game height
-     * @return
-     */
     public int getHeight() {
         return height;
     }
@@ -118,39 +123,59 @@ public class Game implements Runnable {
     private void tick() {
         frames++;
         keyManager.tick();
-        paddle.tick();
-        ball.tick();
-        //  Rebote con el paddle
-        if(ball.intersecta(paddle) && frames > 20){
-            ball.setYDir(ball.getYDir() * -1);
-            Assets.blip.play();
-            frames = 0;
+        if (keyManager.p) {
+            paused = !paused;
         }
-        for(int i = 0; i < bricks.size(); i++){
-            //  Tick para la animacion
-            Brick brick = bricks.get(i);
-            brick.tick();
-            //  Rebote con bricks
-            if (ball.intersectaBrick(brick)) {
-                brick.setLives(brick.getLives()-1);
-                /*brick.bottom(ball);
-                brick.top(ball);
-                brick.left(ball);
-                brick.right(ball);*/
+        if (!paused) {
+            paddle.tick();
+            ball.tick();
+            //  Rebote con el paddle
+            if(ball.intersecta(paddle) && frames > 15) {
+                // ball hits left side of paddle
+                int randX = (int) (Math.random() * 3 + 3);
+                if (ball.getX() >= paddle.getX() + paddle.getWidth() / 2) {
+                    ball.setXDir(randX * 1);
+                    ball.setYDir(ball.getYDir() * -1);
+                } 
+                // ball hits right side of paddle
+                else {
+                    ball.setXDir(randX * -1);
+                    ball.setYDir(ball.getYDir() * -1);
+                }
+                Assets.blip.play();
+                frames = 0;
             }
-        }
-        if(numBricks > 0){
-            if(posX < getWidth()-50)
-            {
-                lives = (int) (Math.random() * 3 + 1);
-                System.out.println(lives);
-                bricks.add(new Brick(posX, posY, 50, 30, lives));
-                posX += 50;
-                numBricks--;
+            for(int i = 0; i < bricks.size(); i++){
+                //  Tick para la animacion
+                Brick brick = bricks.get(i);
+                brick.tick();
+                //  Rebote con bricks
+                if (ball.intersectaBrick(brick)) {
+                    brick.setLives(brick.getLives()-1);
+                    ball.setXDir(ball.getXDir() * -1);
+                    ball.setYDir(ball.getYDir() * -1);
+                    /*brick.bottom(ball);
+                    brick.top(ball);
+                    brick.left(ball);
+                    brick.right(ball);*/
+                }
+                if(brick.getLives() == -45) {
+                    bricks.remove(i);
+                    score += 25;
+                }
             }
-            else{
-                posY += 35;
-                posX = 20;
+            if(numBricks > 0){
+                if(posX < getWidth()-50)
+                {
+                    int livesbrick = (int) (Math.random() * 3 + 1);
+                    bricks.add(new Brick(posX, posY, 50, 30, livesbrick));
+                    posX += 50;
+                    numBricks--;
+                }
+                else{
+                    posY += 35;
+                    posX = 20;
+                }
             }
         }
     }
@@ -165,16 +190,34 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.clearRect(0,0, width,height);
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            //  Render de los bricks 
-            for(int i = 0; i < bricks.size(); i++) {   
-                bricks.get(i).render(g);
-                    
+            if(lives == 0) {
+                g.drawImage(Assets.GameOver, 0, 0, width, height, null);
+                bricks.clear();
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                g.setColor(Color.white);
+                g.drawString("Score: " + score, getWidth()/2-60, getHeight()-100);
+                bs.show();
+                g.dispose();
             }
-            paddle.render(g);
-            ball.render(g);
-            bs.show();
-            g.dispose();
+            else{
+                g = bs.getDrawGraphics();
+                g.clearRect(0,0, width,height);
+                g.drawImage(Assets.background, 0, 0, width, height, null);
+                //  Render de los bricks 
+                for(int i = 0; i < bricks.size(); i++) {   
+                    bricks.get(i).render(g);
+                        
+                }
+                //  Render de las vidas y el score
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+                g.setColor(Color.white);
+                g.drawString("Score: " + score + " Lives: " + lives, getWidth()-200, getHeight()-30);
+            
+                paddle.render(g);
+                ball.render(g);
+                bs.show();
+                g.dispose();
+            }
         }
     }
 

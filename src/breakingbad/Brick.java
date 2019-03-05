@@ -35,7 +35,7 @@ public class Brick extends Item {
         if(lives == 0 ){
             Assets.explosion.play();
         }
-        if(lives <= 0 && lives > -50){
+        if(lives <= 0 && lives > -45){
             g.drawImage(animationBroke.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
             lives--;
         }
@@ -52,6 +52,9 @@ public class Brick extends Item {
         //     lives--;
         //     ball.setYDir(ball.getYDir() * -1);
         // }
+        //if (ball.getY() < getY() + getHeight() && ){
+
+        //}
         if (ball.getY() == getY() + getHeight()){
             ball.setYDir(ball.getYDir() * -1);
         }

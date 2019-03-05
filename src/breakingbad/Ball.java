@@ -17,8 +17,8 @@ class Ball extends Item {
     public Ball(int x, int y, int width, int height, Game game) {
         super(x,y);
         this.game = game;
-        setXDir(4);
-        setYDir(-4);
+        setXDir(2);
+        setYDir(-2);
         setHeight(height);
         setWidth(width);
         setOnScreen(true);
@@ -37,6 +37,7 @@ class Ball extends Item {
             setX(getX()+xDir);
         } else {
             setX(game.getPaddle().getX()+(game.getPaddle().getWidth()/2)-10);
+            setY(game.getHeight() - 106);
         }
         /** Checking for collisions with walls */
         if (getX()+getWidth() > game.getWidth()) {
@@ -48,6 +49,9 @@ class Ball extends Item {
             yDir *= -1;
         } else if (getY()+getHeight() > game.getHeight()) {
             yDir *= -1;
+            //  Se quita una vida si toca la pared inferior
+            game.setLives(game.getLives() -1);
+            setStarted(false);
         }
     }
 

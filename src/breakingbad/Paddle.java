@@ -45,10 +45,10 @@ public class Paddle extends Item {
     public void tick() {
         /** Moving player's paddle */
         if (game.getKeyManager().left) {
-            setX(getX()-2);
+            setX(getX()-5);
         }
         if (game.getKeyManager().right ) {
-            setX(getX()+2);
+            setX(getX()+5);
         }
         /** Checking for collisions with walls */
         if (getX()+getWidth() > game.getWidth()) {

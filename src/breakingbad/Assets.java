@@ -17,6 +17,7 @@ public class Assets {
     public static BufferedImage ball;
     public static SoundClip explosion;
     public static SoundClip blip;
+    public static BufferedImage GameOver;
 
     /**
      * Assets initializer, to be called in Game
@@ -31,6 +32,7 @@ public class Assets {
         ball = ImageLoader.loadImage("/breakingbad/images/ball.png");
         explosion = new SoundClip("/breakingbad/sounds/explosion.wav");
         blip = new SoundClip("/breakingbad/sounds/blip.wav");
+        GameOver = ImageLoader.loadImage("/breakingbad/images/GameOver.jpg");
         
         SpreadSheet spritesheet = new SpreadSheet(brickSprites);
 
