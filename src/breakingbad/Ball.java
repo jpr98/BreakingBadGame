@@ -19,6 +19,7 @@ class Ball extends Item {
         setOnScreen(true);
     }
 
+    /** Setter methods */
     public void setHeight(int height) {
         this.height = height;
     }
@@ -39,6 +40,7 @@ class Ball extends Item {
         this.onScreen = onScreen;
     }
 
+    /** Getter methods */
     public int getHeight() {
         return height;
     }
@@ -59,6 +61,7 @@ class Ball extends Item {
 	return onScreen;
     }
     
+    /** Logic methods */
     @Override
     public void tick() {
         

@@ -16,7 +16,7 @@ public class BreakingBad {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Game game = new Game("Breaking Bad", 100,100);
+        Game game = new Game("Breaking Bad", 700,550);
         game.start();
     }
     

@@ -8,10 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyManager implements KeyListener {
-    public boolean upleft;
-    public boolean upright;
-    public boolean downleft;
-    public boolean downright;
+    public boolean left;
+    public boolean right;
 
     private boolean keys[];
 
@@ -36,9 +34,7 @@ public class KeyManager implements KeyListener {
 
     public void tick() {
         // setting values of pressed keys to directions
-        upleft = keys[KeyEvent.VK_Q];
-        upright = keys[KeyEvent.VK_E];
-        downleft = keys[KeyEvent.VK_A];
-        downright = keys[KeyEvent.VK_D];
+        left = keys[KeyEvent.VK_LEFT];
+        right = keys[KeyEvent.VK_RIGHT];
     }
 }
