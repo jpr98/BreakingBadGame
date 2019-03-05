@@ -15,6 +15,7 @@ public class Brick extends Item {
 
     private int lives, hits, width, height;
     private boolean destroyed;
+    private Animation animationBroke;
 
     public Brick(int x, int y, int width, int height, int lives) {
         super(x, y);
@@ -23,15 +24,20 @@ public class Brick extends Item {
         this.width = width;
         this.height = height;
         this.lives = lives;
+        this.animationBroke = new Animation(Assets.brickBroke, 200);
     }
 
     @Override
     public void tick() {
-        
+        this.animationBroke.tick();
     }
 
     @Override
     public void render(Graphics g) {
+        if(lives <= 0 && lives > -50){
+            g.drawImage(animationBroke.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+            lives--;
+        }
         if(lives == 1){
             g.drawImage(Assets.brick, getX(), getY(), getWidth(), getHeight(), null);}
         if(lives == 2){
@@ -116,7 +122,7 @@ public class Brick extends Item {
     public int getHeight(){
         return height;
     }
-    
+
     public int getWidth(){
         return width;
     }

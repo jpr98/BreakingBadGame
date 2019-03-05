@@ -20,6 +20,7 @@ public class Game implements Runnable {
     private boolean running;
     private KeyManager keyManager;
     private Paddle paddle;
+    private Ball ball;
     //  Linked list, numero de bricks, posicion x y y
     private LinkedList<Brick> bricks;
     private int numBricks;
@@ -69,6 +70,10 @@ public class Game implements Runnable {
         return keyManager;
     }
 
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
     /**
      * Initializer, create game figures and display
      */
@@ -76,6 +81,7 @@ public class Game implements Runnable {
         display = new Display(title, width, height);
         Assets.init();
         paddle = new Paddle((getWidth()/2)-50, getHeight() - 80, 35, 100, this);
+        ball = new Ball((getWidth()/2)-12, getHeight() - 100, 25, 25, this);
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -110,6 +116,11 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         paddle.tick();
+        ball.tick();
+        for(int i = 0; i < bricks.size(); i++){
+            Brick brick = bricks.get(i);
+            brick.tick();
+        }
         if(numBricks > 0){
             if(posX < getWidth()-50)
             {
@@ -138,11 +149,12 @@ public class Game implements Runnable {
             g.clearRect(0,0, width,height);
             g.drawImage(Assets.background, 0, 0, width, height, null);
             //  Render de los bricks 
-            for(int i = 0; i < bricks.size(); i++)
-                {
-                    bricks.get(i).render(g);
-                }
+            for(int i = 0; i < bricks.size(); i++) {   
+                bricks.get(i).render(g);
+                    
+            }
             paddle.render(g);
+            ball.render(g);
             bs.show();
             g.dispose();
         }

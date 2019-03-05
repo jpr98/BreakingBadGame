@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     public boolean left;
     public boolean right;
+    public boolean up;
 
     private boolean keys[];
 
@@ -36,5 +37,6 @@ public class KeyManager implements KeyListener {
         // setting values of pressed keys to directions
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
+        up = keys[KeyEvent.VK_UP];
     }
 }

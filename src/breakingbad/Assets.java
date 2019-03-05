@@ -12,6 +12,8 @@ public class Assets {
     public static BufferedImage brick;
     public static BufferedImage brick2;
     public static BufferedImage brick3;
+    public static BufferedImage brickSprites;
+    public static BufferedImage brickBroke[];
     public static BufferedImage ball;
 
     /**
@@ -23,6 +25,17 @@ public class Assets {
         brick = ImageLoader.loadImage("/breakingbad/images/meth.png");
         brick2 = ImageLoader.loadImage("/breakingbad/images/meth2.png");
         brick3 = ImageLoader.loadImage("/breakingbad/images/meth3.png");
+        brickSprites = ImageLoader.loadImage("/breakingbad/images/methSpriteSheet.png");
         ball = ImageLoader.loadImage("/breakingbad/images/ball.png");
+        
+        SpreadSheet spritesheet = new SpreadSheet(brickSprites);
+
+
+        brickBroke = new BufferedImage[4];
+        for(int i = 0; i < 4; i++){
+            brickBroke[i] = spritesheet.crop(0, i * 44, 100, 44);
+        }
+
+
     }
 }
