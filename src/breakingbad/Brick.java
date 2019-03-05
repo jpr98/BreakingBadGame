@@ -6,6 +6,7 @@
 package breakingbad;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -13,14 +14,11 @@ import java.awt.Graphics;
  */
 public class Brick extends Item {
 
-    private int lives, hits, width, height;
-    private boolean destroyed;
+    private int lives, width, height;
     private Animation animationBroke;
 
     public Brick(int x, int y, int width, int height, int lives) {
         super(x, y);
-        setHits(0);
-        setDestroyed(false);
         this.width = width;
         this.height = height;
         this.lives = lives;
@@ -34,6 +32,9 @@ public class Brick extends Item {
 
     @Override
     public void render(Graphics g) {
+        if(lives == 0 ){
+            Assets.explosion.play();
+        }
         if(lives <= 0 && lives > -50){
             g.drawImage(animationBroke.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
             lives--;
@@ -46,56 +47,48 @@ public class Brick extends Item {
             g.drawImage(Assets.brick3, getX(), getY(), getWidth(), getHeight(), null);}
     }
 
-    public void addHit() {
-        hits++;
-        if (hits == lives) {
-            setDestroyed(true);
+    public void bottom(Ball ball) {
+        // if ((ball.getX() >= getX()) && (ball.getX() <= getX() + getWidth() + 1) && (ball.getY() == getY() + getHeight())) {
+        //     lives--;
+        //     ball.setYDir(ball.getYDir() * -1);
+        // }
+        if (ball.getY() == getY() + getHeight()){
+            ball.setYDir(ball.getYDir() * -1);
+        }
+    }
+    
+    public void top(Ball ball){
+        // if ((ball.getX() >= getX()) && (ball.getX() <= getX() + getWidth() + 1) && (ball.getY() == getX())) {
+        //     lives --;
+        //     ball.setYDir(ball.getYDir() * -1);
+        // }
+        if (ball.getY() + ball.getHeight() == getY()) {
+            lives--;
+            ball.setYDir(ball.getYDir() * -1);
+        }
+    }
+    
+    public void left(Ball ball) {
+        if ((ball.getY() >= getY()) && (ball.getY() <= getY() + getHeight()) && (ball.getX() == getX())) {
+            lives--;
+            ball.setXDir(ball.getXDir() * -1);
+        }
+    }
+    
+    public void right(Ball ball) {
+        if ((ball.getY() >= getY()) && (ball.getY() <= getY() + getHeight()) && (ball.getX() == getX() + getWidth())) {
+            lives--;
+            ball.setXDir(ball.getXDir() * -1);
         }
     }
 
-    public boolean hitBottom(int ballX, int ballY) {
-        if ((ballX >= x) && (ballX <= x + width + 1) && (ballY == y + height) && (destroyed == false)) {
-            addHit();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean hitTop(int ballX, int ballY) {
-        if ((ballX >= x) && (ballX <= x + width + 1) && (ballY == y) && (destroyed == false)) {
-            addHit();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean hitLeft(int ballX, int ballY) {
-        if ((ballY >= y) && (ballY <= y + height) && (ballX == x) && (destroyed == false)) {
-            addHit();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean hitRight(int ballX, int ballY) {
-        if ((ballY >= y) && (ballY <= y + height) && (ballX == x + width) && (destroyed == false)) {
-            addHit();
-            return true;
-        }
-        return false;
+    public Rectangle getPerimetro(){
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
     //Set methods
     public void setLives(int lives) {
         this.lives = lives;
-    }
-
-    public void setHits(int hits) {
-        this.hits = hits;
-    }
-
-    public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
     }
 
     public void setHeight(int height){
@@ -110,15 +103,6 @@ public class Brick extends Item {
     public int getLives() {
         return lives;
     }
-
-    public int getHits() {
-        return hits;
-    }
-
-    public boolean isDestroyed() {
-        return destroyed;
-    }
-
     public int getHeight(){
         return height;
     }

@@ -15,6 +15,8 @@ public class Assets {
     public static BufferedImage brickSprites;
     public static BufferedImage brickBroke[];
     public static BufferedImage ball;
+    public static SoundClip explosion;
+    public static SoundClip blip;
 
     /**
      * Assets initializer, to be called in Game
@@ -27,6 +29,8 @@ public class Assets {
         brick3 = ImageLoader.loadImage("/breakingbad/images/meth3.png");
         brickSprites = ImageLoader.loadImage("/breakingbad/images/methSpriteSheet.png");
         ball = ImageLoader.loadImage("/breakingbad/images/ball.png");
+        explosion = new SoundClip("/breakingbad/sounds/explosion.wav");
+        blip = new SoundClip("/breakingbad/sounds/blip.wav");
         
         SpreadSheet spritesheet = new SpreadSheet(brickSprites);
 

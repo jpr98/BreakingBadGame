@@ -26,7 +26,8 @@ public class Game implements Runnable {
     private int numBricks;
     private int posX;
     private int posY;
-    private int lives = 4; 
+    private int lives = 4;
+    private int frames;
 
     /**
      * Constructor
@@ -44,6 +45,7 @@ public class Game implements Runnable {
         bricks = new LinkedList<>();
         posY = 10;
         posX = 20;
+        frames = 0;
     }
 
     /**
@@ -81,7 +83,7 @@ public class Game implements Runnable {
         display = new Display(title, width, height);
         Assets.init();
         paddle = new Paddle((getWidth()/2)-50, getHeight() - 80, 35, 100, this);
-        ball = new Ball((getWidth()/2)-12, getHeight() - 100, 25, 25, this);
+        ball = new Ball((getWidth()/2)-12, getHeight() - 106, 25, 25, this);
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -114,12 +116,28 @@ public class Game implements Runnable {
      * Make changes to objects each frame
      */
     private void tick() {
+        frames++;
         keyManager.tick();
         paddle.tick();
         ball.tick();
+        //  Rebote con el paddle
+        if(ball.intersecta(paddle) && frames > 20){
+            ball.setYDir(ball.getYDir() * -1);
+            Assets.blip.play();
+            frames = 0;
+        }
         for(int i = 0; i < bricks.size(); i++){
+            //  Tick para la animacion
             Brick brick = bricks.get(i);
             brick.tick();
+            //  Rebote con bricks
+            if (ball.intersectaBrick(brick)) {
+                brick.setLives(brick.getLives()-1);
+                /*brick.bottom(ball);
+                brick.top(ball);
+                brick.left(ball);
+                brick.right(ball);*/
+            }
         }
         if(numBricks > 0){
             if(posX < getWidth()-50)

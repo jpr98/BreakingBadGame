@@ -1,6 +1,7 @@
 package breakingbad;
 
 import java.awt.*;
+import java.awt.Rectangle;
 
 public class Paddle extends Item {
     private int height;
@@ -62,5 +63,8 @@ public class Paddle extends Item {
         g.drawImage(Assets.paddle, getX(), getY(), getWidth(), getHeight(), null);
     }
 
+    public Rectangle getPerimetro(){
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
     
 }

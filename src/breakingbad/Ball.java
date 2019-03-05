@@ -1,6 +1,7 @@
 package breakingbad;
 
 import java.awt.*;
+import java.awt.Rectangle;
 
 class Ball extends Item {
     
@@ -11,12 +12,13 @@ class Ball extends Item {
     private int yDir;
     private Game game;
     private boolean started;
+    
 
     public Ball(int x, int y, int width, int height, Game game) {
         super(x,y);
         this.game = game;
-        setXDir(1);
-        setYDir(-1);
+        setXDir(4);
+        setYDir(-4);
         setHeight(height);
         setWidth(width);
         setOnScreen(true);
@@ -31,13 +33,37 @@ class Ball extends Item {
             setStarted(true);
         }
         if (isStarted()) {
-            setY(getY()-2);
-            setX(getX()-2);
+            setY(getY()+yDir);
+            setX(getX()+xDir);
         } else {
             setX(game.getPaddle().getX()+(game.getPaddle().getWidth()/2)-10);
         }
         /** Checking for collisions with walls */
-        
+        if (getX()+getWidth() > game.getWidth()) {
+            xDir *= -1;
+        } else if (getX() < 0) {
+            xDir *= -1;
+        }
+        if (getY() < 0) {
+            yDir *= -1;
+        } else if (getY()+getHeight() > game.getHeight()) {
+            yDir *= -1;
+        }
+    }
+
+    public Rectangle getPerimetro(){
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    public boolean intersecta(Object obj){
+        return obj instanceof Paddle && getPerimetro().intersects(((Paddle)obj).getPerimetro());
+    }
+    
+    public boolean intersectaBrick(Object obj){
+        if (((Brick)obj).getLives() < -50) {
+            return false;
+        }
+        return obj instanceof Brick && getPerimetro().intersects(((Brick)obj).getPerimetro());
     }
 
     @Override
