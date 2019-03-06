@@ -5,6 +5,7 @@
  */
 package breakingbad;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 public class Assets {
     public static BufferedImage background;
@@ -18,6 +19,7 @@ public class Assets {
     public static SoundClip explosion;
     public static SoundClip blip;
     public static BufferedImage GameOver;
+    public static BufferedImage youWin;
 
     /**
      * Assets initializer, to be called in Game
@@ -33,6 +35,7 @@ public class Assets {
         explosion = new SoundClip("/breakingbad/sounds/explosion.wav");
         blip = new SoundClip("/breakingbad/sounds/blip.wav");
         GameOver = ImageLoader.loadImage("/breakingbad/images/GameOver.jpg");
+        youWin = ImageLoader.loadImage("/breakingbad/images/youWin.png");
         
         SpreadSheet spritesheet = new SpreadSheet(brickSprites);
 

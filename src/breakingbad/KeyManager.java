@@ -14,6 +14,7 @@ public class KeyManager implements KeyListener {
     public boolean right;
     public boolean up;
     public boolean p;
+    public boolean r;
 
     private boolean keys[];
 
@@ -23,19 +24,32 @@ public class KeyManager implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // if(e.getKeyCode() == KeyEvent.VK_P)
-            
+        
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() != KeyEvent.VK_P)
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            if (p) {
+                keys[e.getKeyCode()] = false;
+            } else {
+                keys[e.getKeyCode()] = true;
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_R){
+            if (r) {
+                keys[e.getKeyCode()] = false;
+            } else {
+                keys[e.getKeyCode()] = true;
+            }
+        }else{
             keys[e.getKeyCode()] = true;
+        }
+        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() != KeyEvent.VK_P)
+        if (e.getKeyCode() != KeyEvent.VK_P && e.getKeyCode() != KeyEvent.VK_R)
             keys[e.getKeyCode()] = false;
     }
 
@@ -45,5 +59,6 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         up = keys[KeyEvent.VK_UP];
         p = keys[KeyEvent.VK_P];
+        r = keys[KeyEvent.VK_R];
     }
 }

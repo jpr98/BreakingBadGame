@@ -42,15 +42,7 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
         this.running = false;
-        numBricks = 104;
         keyManager = new KeyManager();
-        bricks = new LinkedList<>();
-        posY = 10;
-        posX = 20;
-        frames = 0;
-        score = 0;
-        lives = (int)(Math.random() * 3 + 3);
-        paused = false;
     }
 
     public void setLives(int lives){
@@ -77,6 +69,10 @@ public class Game implements Runnable {
         return keyManager;
     }
 
+    /**
+     * Return object for paddle
+     * @return paddle
+     */
     public Paddle getPaddle() {
         return paddle;
     }
@@ -89,9 +85,42 @@ public class Game implements Runnable {
         Assets.init();
         paddle = new Paddle((getWidth()/2)-50, getHeight() - 80, 35, 100, this);
         ball = new Ball((getWidth()/2)-12, getHeight() - 106, 25, 25, this);
+        createBricks();
+        frames = 0;
+        score = 0;
+        lives = (int)(Math.random() * 3 + 3);
+        paused = false;
         display.getJframe().addKeyListener(keyManager);
     }
 
+    private void restart() {
+        Assets.init();
+        paddle = new Paddle((getWidth()/2)-50, getHeight() - 80, 35, 100, this);
+        ball = new Ball((getWidth()/2)-12, getHeight() - 106, 25, 25, this);
+        createBricks();
+        frames = 0;
+        score = 0;
+        lives = (int)(Math.random() * 3 + 3);
+        paused = false;
+    }
+
+    private void createBricks() {
+        bricks = new LinkedList<>();
+        posY = 10;
+        posX = 20;
+        numBricks = 104;
+        while (numBricks > 0){
+            if(posX < getWidth()-50) {
+                int livesbrick = (int) (Math.random() * 3 + 1);
+                bricks.add(new Brick(posX, posY, 50, 30, livesbrick));
+                posX += 50;
+                numBricks--;
+            } else {
+                posY += 35;
+                posX = 20;
+            }
+        }
+    }
     /**
      * Start game
      */
@@ -123,8 +152,14 @@ public class Game implements Runnable {
     private void tick() {
         frames++;
         keyManager.tick();
+        // Pause and restart listeners
         if (keyManager.p) {
-            paused = !paused;
+            paused = true;
+        } else {
+            paused = false;
+        }
+        if (keyManager.r) {
+            restart();
         }
         if (!paused) {
             paddle.tick();
@@ -154,27 +189,10 @@ public class Game implements Runnable {
                     brick.setLives(brick.getLives()-1);
                     ball.setXDir(ball.getXDir() * -1);
                     ball.setYDir(ball.getYDir() * -1);
-                    /*brick.bottom(ball);
-                    brick.top(ball);
-                    brick.left(ball);
-                    brick.right(ball);*/
                 }
                 if(brick.getLives() == -45) {
                     bricks.remove(i);
                     score += 25;
-                }
-            }
-            if(numBricks > 0){
-                if(posX < getWidth()-50)
-                {
-                    int livesbrick = (int) (Math.random() * 3 + 1);
-                    bricks.add(new Brick(posX, posY, 50, 30, livesbrick));
-                    posX += 50;
-                    numBricks--;
-                }
-                else{
-                    posY += 35;
-                    posX = 20;
                 }
             }
         }
@@ -190,7 +208,7 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.clearRect(0,0, width,height);
-            if(lives == 0) {
+            if(lives == 0 && bricks.size() > 0) {
                 g.drawImage(Assets.GameOver, 0, 0, width, height, null);
                 bricks.clear();
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -199,7 +217,7 @@ public class Game implements Runnable {
                 bs.show();
                 g.dispose();
             }
-            else{
+            else if (bricks.size() > 0){
                 g = bs.getDrawGraphics();
                 g.clearRect(0,0, width,height);
                 g.drawImage(Assets.background, 0, 0, width, height, null);
@@ -215,6 +233,15 @@ public class Game implements Runnable {
             
                 paddle.render(g);
                 ball.render(g);
+                bs.show();
+                g.dispose();
+            }
+            else {
+                g.drawImage(Assets.youWin, 0, 0, width, height, null);
+                bricks.clear();
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                g.setColor(Color.white);
+                g.drawString("Score: " + score, getWidth()/2-60, getHeight()-100);
                 bs.show();
                 g.dispose();
             }
