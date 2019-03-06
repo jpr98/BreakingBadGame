@@ -23,26 +23,20 @@ public class KeyManager implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+        // if(e.getKeyCode() == KeyEvent.VK_P)
+            
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() != KeyEvent.VK_P)
+        if(e.getKeyCode() != KeyEvent.VK_P)
             keys[e.getKeyCode()] = true;
-            
-        if (keys[KeyEvent.VK_P]) {
-            keys[e.getKeyCode()] = false;
-        } else {
-            keys[e.getKeyCode()] = true;
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() != KeyEvent.VK_P) {
+        if(e.getKeyCode() != KeyEvent.VK_P)
             keys[e.getKeyCode()] = false;
-        }
     }
 
     public void tick() {
