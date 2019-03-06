@@ -15,6 +15,8 @@ public class KeyManager implements KeyListener {
     public boolean up;
     public boolean p;
     public boolean r;
+    public boolean g;
+    public boolean c;
 
     private boolean keys[];
 
@@ -53,5 +55,7 @@ public class KeyManager implements KeyListener {
         up = keys[KeyEvent.VK_UP];
         p = keys[KeyEvent.VK_P];
         r = keys[KeyEvent.VK_R];
+        g = keys[KeyEvent.VK_G];
+        c = keys[KeyEvent.VK_C];
     }
 }

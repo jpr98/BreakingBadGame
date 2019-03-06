@@ -66,6 +66,17 @@ class Ball extends Item {
     }
 
     /**
+     * Stops the ball's movement
+     */
+    public void stopBall() {
+        setX(0);
+        setY(0);
+        setXDir(0);
+        setYDir(0);
+        setStarted(true);
+    }
+
+    /**
      * Creates a Rectangle object the size of the ball
      * @return rectangle
      */
