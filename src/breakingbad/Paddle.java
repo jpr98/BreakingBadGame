@@ -17,30 +17,52 @@ public class Paddle extends Item {
         
     }
 
+    /**
+     * Sets object for height
+     * @param height
+     */
     public void setHeight(int height) {
         this.height = height;
     }
-    
+    /**
+     * Sets object for width
+     * @param width
+     */
     public void setWidth(int width) {
         this.width = width;
     }
-    
+    /**
+     * Sets object for xSpeed
+     * @param xSpeed
+     */
     public void setXSpeed(int xSpeed) {
         this.xSpeed = xSpeed;
     }
-    
+    /**
+     * Return object for height
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
-    
+    /**
+     * Return object for width
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
-    
+    /**
+     * Return object for xSpeed
+     * @return xSpeed
+     */
     public int getXSpeed() {
         return xSpeed;
     }
-    
+
+    /**
+     * Makes changes to objects each frame
+     */
     @Override
     public void tick() {
         /** Moving player's paddle */
@@ -58,11 +80,18 @@ public class Paddle extends Item {
         }
     }
 
+    /**
+     * Renders de proper assets for the paddle
+     */
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.paddle, getX(), getY(), getWidth(), getHeight(), null);
     }
 
+    /**
+     * Returns a rectangle of the objects perimeter
+     * Used for checking collisions
+     */
     public Rectangle getPerimetro(){
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }

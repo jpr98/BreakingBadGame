@@ -24,7 +24,6 @@ public class KeyManager implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
     }
 
     @Override
@@ -35,13 +34,7 @@ public class KeyManager implements KeyListener {
             } else {
                 keys[e.getKeyCode()] = true;
             }
-        } else if (e.getKeyCode() == KeyEvent.VK_R){
-            if (r) {
-                keys[e.getKeyCode()] = false;
-            } else {
-                keys[e.getKeyCode()] = true;
-            }
-        }else{
+        } else{
             keys[e.getKeyCode()] = true;
         }
         
@@ -49,7 +42,7 @@ public class KeyManager implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() != KeyEvent.VK_P && e.getKeyCode() != KeyEvent.VK_R)
+        if (e.getKeyCode() != KeyEvent.VK_P)
             keys[e.getKeyCode()] = false;
     }
 

@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brick class manages the objects to be destroyed in the game,
+ * sets their sizes and draws different states of them
  */
 package breakingbad;
 
@@ -25,20 +24,29 @@ public class Brick extends Item {
         this.animationBroke = new Animation(Assets.brickBroke, 200);
     }
 
+    /**
+     * Makes changes to objects each frame
+     */
     @Override
     public void tick() {
         this.animationBroke.tick();
     }
 
+    /**
+     * Draw images for each frame
+     */
     @Override
     public void render(Graphics g) {
+        //  In case of having ceros lives play explosion sound
         if(lives == 0 ){
             Assets.explosion.play();
         }
+        //  This is a delay for the animation run just once
         if(lives <= 0 && lives > -45){
             g.drawImage(animationBroke.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
             lives--;
         }
+        //  Depending on number of lives the color of the brick changes
         if(lives == 1){
             g.drawImage(Assets.brick, getX(), getY(), getWidth(), getHeight(), null);}
         if(lives == 2){
@@ -47,69 +55,52 @@ public class Brick extends Item {
             g.drawImage(Assets.brick3, getX(), getY(), getWidth(), getHeight(), null);}
     }
 
-    public void bottom(Ball ball) {
-        // if ((ball.getX() >= getX()) && (ball.getX() <= getX() + getWidth() + 1) && (ball.getY() == getY() + getHeight())) {
-        //     lives--;
-        //     ball.setYDir(ball.getYDir() * -1);
-        // }
-        //if (ball.getY() < getY() + getHeight() && ){
-
-        //}
-        if (ball.getY() == getY() + getHeight()){
-            ball.setYDir(ball.getYDir() * -1);
-        }
-    }
-    
-    public void top(Ball ball){
-        // if ((ball.getX() >= getX()) && (ball.getX() <= getX() + getWidth() + 1) && (ball.getY() == getX())) {
-        //     lives --;
-        //     ball.setYDir(ball.getYDir() * -1);
-        // }
-        if (ball.getY() + ball.getHeight() == getY()) {
-            lives--;
-            ball.setYDir(ball.getYDir() * -1);
-        }
-    }
-    
-    public void left(Ball ball) {
-        if ((ball.getY() >= getY()) && (ball.getY() <= getY() + getHeight()) && (ball.getX() == getX())) {
-            lives--;
-            ball.setXDir(ball.getXDir() * -1);
-        }
-    }
-    
-    public void right(Ball ball) {
-        if ((ball.getY() >= getY()) && (ball.getY() <= getY() + getHeight()) && (ball.getX() == getX() + getWidth())) {
-            lives--;
-            ball.setXDir(ball.getXDir() * -1);
-        }
-    }
-
+    /**
+     * Creates rectangle object for the brick's size
+     */
     public Rectangle getPerimetro(){
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    //Set methods
+    /**
+     * Sets object for lives
+     * @param lives
+     */
     public void setLives(int lives) {
         this.lives = lives;
     }
-
+    /**
+     * Sets object for height
+     * @param height
+     */
     public void setHeight(int height){
         this.height = height;
     }
-
+    /**
+     * Sets object for width
+     * @param width
+     */
     public void setWidth(int width){
         this.width = width;
     }
-
-    //Get methods
+    /**
+     * Return object for lives
+     * @return lives
+     */
     public int getLives() {
         return lives;
     }
+    /**
+     * Return object for height
+     * @return height
+     */
     public int getHeight(){
         return height;
     }
-
+    /**
+     * Return object for width
+     * @return width
+     */
     public int getWidth(){
         return width;
     }

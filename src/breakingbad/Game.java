@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Game class creates the objects, manages the interactions between them,
+ * and pauses, restarts and end the game
  */
 package breakingbad;
 
@@ -21,7 +20,6 @@ public class Game implements Runnable {
     private KeyManager keyManager;
     private Paddle paddle;
     private Ball ball;
-    //  Linked list, numero de bricks, posicion x y y
     private LinkedList<Brick> bricks;
     private int numBricks;
     private int posX;
@@ -45,18 +43,34 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
     }
 
+    /**
+     * Sets the game lives
+     * @param lives
+     */
     public void setLives(int lives){
         this.lives = lives;
     }
 
+    /**
+     * Returns the game lives
+     * @return lives
+     */
     public int getLives(){
         return lives;
     }
 
+    /**
+     * Return game width
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Return game height
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
@@ -93,6 +107,9 @@ public class Game implements Runnable {
         display.getJframe().addKeyListener(keyManager);
     }
 
+    /**
+     * Restarts the game and sets the variables to initial values
+     */
     private void restart() {
         Assets.init();
         paddle = new Paddle((getWidth()/2)-50, getHeight() - 80, 35, 100, this);
@@ -104,13 +121,16 @@ public class Game implements Runnable {
         paused = false;
     }
 
+    /**
+     * Creates the bricks with random number of lives
+     */
     private void createBricks() {
         bricks = new LinkedList<>();
         posY = 10;
         posX = 20;
         numBricks = 104;
         while (numBricks > 0){
-            if(posX < getWidth()-50) {
+            if (posX < getWidth()-50) {
                 int livesbrick = (int) (Math.random() * 3 + 1);
                 bricks.add(new Brick(posX, posY, 50, 30, livesbrick));
                 posX += 50;
@@ -122,7 +142,7 @@ public class Game implements Runnable {
         }
     }
     /**
-     * Start game
+     * Starts the game
      */
     @Override
     public void run() {
@@ -147,7 +167,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * Make changes to objects each frame
+     * Makes changes to objects each frame
      */
     private void tick() {
         frames++;
@@ -161,10 +181,11 @@ public class Game implements Runnable {
         if (keyManager.r) {
             restart();
         }
+        // Logic to the game's objects
         if (!paused) {
             paddle.tick();
             ball.tick();
-            //  Rebote con el paddle
+            //  Paddle interaction
             if(ball.intersecta(paddle) && frames > 15) {
                 // ball hits left side of paddle
                 int randX = (int) (Math.random() * 3 + 3);
@@ -180,18 +201,19 @@ public class Game implements Runnable {
                 Assets.blip.play();
                 frames = 0;
             }
+            // Brick interaction
             for(int i = 0; i < bricks.size(); i++){
                 //  Tick para la animacion
                 Brick brick = bricks.get(i);
                 brick.tick();
-                //  Rebote con bricks
+                // Brick collisions
                 if (ball.intersectaBrick(brick)) {
                     brick.setLives(brick.getLives()-1);
                     ball.setXDir(ball.getXDir() * -1);
                     ball.setYDir(ball.getYDir() * -1);
                 }
-                if(brick.getLives() == -45) {
-                    bricks.remove(i);
+                if (brick.getLives() == -45) {
+                   bricks.remove(i);
                     score += 25;
                 }
             }
@@ -199,7 +221,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * Draw images each frame
+     * Draw images for each frame
      */
     private void render() {
         bs = display.getCanvas().getBufferStrategy();
@@ -208,6 +230,7 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.clearRect(0,0, width,height);
+            // Losing display
             if(lives == 0 && bricks.size() > 0) {
                 g.drawImage(Assets.GameOver, 0, 0, width, height, null);
                 bricks.clear();
@@ -217,25 +240,27 @@ public class Game implements Runnable {
                 bs.show();
                 g.dispose();
             }
+            // Playing display
             else if (bricks.size() > 0){
                 g = bs.getDrawGraphics();
                 g.clearRect(0,0, width,height);
                 g.drawImage(Assets.background, 0, 0, width, height, null);
-                //  Render de los bricks 
-                for(int i = 0; i < bricks.size(); i++) {   
-                    bricks.get(i).render(g);
-                        
-                }
-                //  Render de las vidas y el score
+
+                //  Rendering lives and score
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.white);
                 g.drawString("Score: " + score + " Lives: " + lives, getWidth()-200, getHeight()-30);
             
+                // Render of objects
+                for(int i = 0; i < bricks.size(); i++) {   
+                    bricks.get(i).render(g);
+                }
                 paddle.render(g);
                 ball.render(g);
                 bs.show();
                 g.dispose();
             }
+            // Winning display
             else {
                 g.drawImage(Assets.youWin, 0, 0, width, height, null);
                 bricks.clear();

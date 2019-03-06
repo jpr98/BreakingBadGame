@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Animation class makes the sprites move when a certain action happens
  */
 package breakingbad;
 
@@ -26,10 +24,16 @@ public class Animation {
         lastTime = System.currentTimeMillis();
     }
 
+    /**
+     * Gets the current frame
+     */
     public BufferedImage getCurrentFrame(){
         return frames[index];   
     }
 
+    /**
+     * Makes changes to objects each frame
+     */
     public void tick(){
         timer += System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
